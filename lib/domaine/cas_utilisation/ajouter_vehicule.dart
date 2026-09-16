@@ -1,14 +1,14 @@
 import '../depots/depot_vehicule.dart';
 import '../entites/vehicule.dart';
 
-class ObtenirVehicules {
+class AjouterVehicule {
   final DepotVehicule _depot;
 
-  ObtenirVehicules({
+  AjouterVehicule({
     required this._depot,
   });
 
-  Future<List<Vehicule>> executer() {
-    return _depot.obtenirTous();
+  Future<void> executer(Vehicule vehicule) {
+    return _depot.ajouter(vehicule);
   }
 }

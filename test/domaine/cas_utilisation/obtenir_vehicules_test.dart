@@ -6,11 +6,12 @@ import 'package:gestauto/donnees/sources/distantes/source_vehicule_distante_memo
 
 void main() {
   late ObtenirVehicules obtenirVehicules;
+  late DepotVehiculeImpl depot;
 
   setUp(() {
     final source = SourceVehiculeDistanteMemoire();
 
-    final depot = DepotVehiculeImpl(
+    depot = DepotVehiculeImpl(
       sourceDistante: source,
     );
 
@@ -34,7 +35,7 @@ void main() {
       montantVersementAttendu: 20000,
     );
 
-    await obtenirVehicules.depot.ajouter(vehicule);
+    await depot.ajouter(vehicule);
 
     final resultats = await obtenirVehicules.executer();
 
@@ -43,9 +44,12 @@ void main() {
     expect(resultats.first.marque, 'Toyota');
   });
 
-  test('le cas d utilisation retourne une liste vide si aucun véhicule existe', () async {
-    final resultats = await obtenirVehicules.executer();
+  test(
+    'le cas d utilisation retourne une liste vide si aucun véhicule existe',
+    () async {
+      final resultats = await obtenirVehicules.executer();
 
-    expect(resultats, isEmpty);
-  });
+      expect(resultats, isEmpty);
+    },
+  );
 }
