@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
+import '../stockage/stockage_session.dart';
+import 'intercepteur_authentification.dart';
 import 'intercepteur_erreur.dart';
 
 class ConfigurationDio {
@@ -13,7 +15,9 @@ class ConfigurationDio {
     return 'http://localhost:8080';
   }
 
-  static Dio creer() {
+  static Dio creer({
+    required StockageSession stockageSession,
+  }) {
     final dio = Dio(
       BaseOptions(
         baseUrl: _adresseApi,
@@ -23,6 +27,12 @@ class ConfigurationDio {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
+      ),
+    );
+
+    dio.interceptors.add(
+      IntercepteurAuthentification(
+        stockageSession: stockageSession,
       ),
     );
 
