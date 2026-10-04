@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../domaine/cas_utilisation/connecter_utilisateur.dart';
 import '../../domaine/cas_utilisation/inscrire_utilisateur.dart';
+import '../../presentation/accueil/controleur_tableau_de_bord.dart';
 import '../accueil/page_accueil.dart';
 import 'page_inscription.dart';
 
 class PageConnexion extends StatefulWidget {
   final ConnecterUtilisateur connecterUtilisateur;
   final InscrireUtilisateur inscrireUtilisateur;
+  final ControleurTableauDeBord controleurTableauDeBord;
 
   const PageConnexion({
     super.key,
     required this.connecterUtilisateur,
     required this.inscrireUtilisateur,
+    required this.controleurTableauDeBord,
   });
 
   @override
@@ -66,7 +69,10 @@ class _PageConnexionState extends State<PageConnexion> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const PageAccueil(),
+          builder: (context) => PageAccueil(
+            controleur:
+                widget.controleurTableauDeBord,
+          ),
         ),
       );
     } catch (exception) {
@@ -94,7 +100,8 @@ class _PageConnexionState extends State<PageConnexion> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => PageInscription(
-          inscrireUtilisateur: widget.inscrireUtilisateur,
+          inscrireUtilisateur:
+              widget.inscrireUtilisateur,
         ),
       ),
     );
@@ -116,7 +123,8 @@ class _PageConnexionState extends State<PageConnexion> {
             child: Form(
               key: _formulaire,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment:
+                    CrossAxisAlignment.stretch,
                 children: [
                   const Text(
                     'GESTAUTO',
@@ -134,7 +142,8 @@ class _PageConnexionState extends State<PageConnexion> {
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _controleurEmail,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType:
+                        TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Adresse e-mail',
                       border: OutlineInputBorder(),
@@ -157,11 +166,14 @@ class _PageConnexionState extends State<PageConnexion> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    controller: _controleurMotDePasse,
-                    obscureText: !_motDePasseVisible,
+                    controller:
+                        _controleurMotDePasse,
+                    obscureText:
+                        !_motDePasseVisible,
                     decoration: InputDecoration(
                       labelText: 'Mot de passe',
-                      border: const OutlineInputBorder(),
+                      border:
+                          const OutlineInputBorder(),
                       prefixIcon: const Icon(
                         Icons.lock_outline,
                       ),
@@ -180,7 +192,8 @@ class _PageConnexionState extends State<PageConnexion> {
                       ),
                     ),
                     validator: (valeur) {
-                      if (valeur == null || valeur.isEmpty) {
+                      if (valeur == null ||
+                          valeur.isEmpty) {
                         return 'Veuillez saisir votre mot de passe';
                       }
 
@@ -189,22 +202,27 @@ class _PageConnexionState extends State<PageConnexion> {
                   ),
                   const SizedBox(height: 24),
                   FilledButton(
-                    onPressed:
-                        _connexionEnCours ? null : _soumettre,
+                    onPressed: _connexionEnCours
+                        ? null
+                        : _soumettre,
                     child: _connexionEnCours
                         ? const SizedBox(
                             width: 20,
                             height: 20,
-                            child: CircularProgressIndicator(
+                            child:
+                                CircularProgressIndicator(
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text('Se connecter'),
+                        : const Text(
+                            'Se connecter',
+                          ),
                   ),
                   const SizedBox(height: 12),
                   TextButton(
-                    onPressed:
-                        _connexionEnCours ? null : _ouvrirInscription,
+                    onPressed: _connexionEnCours
+                        ? null
+                        : _ouvrirInscription,
                     child: const Text(
                       "Pas encore de compte ? S'inscrire",
                     ),

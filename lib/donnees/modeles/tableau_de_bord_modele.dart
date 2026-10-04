@@ -43,9 +43,11 @@ class TableauDeBordModele {
       nombreVehicules:
           (json['nombreVehicules'] as num).toInt(),
       montantVersementsAttendus:
-          (json['montantVersementsAttendus'] as num).toDouble(),
+          (json['montantVersementsAttendus'] as num)
+              .toDouble(),
       montantVersementsRecus:
-          (json['montantVersementsRecus'] as num).toDouble(),
+          (json['montantVersementsRecus'] as num)
+              .toDouble(),
       ecartVersements:
           (json['ecartVersements'] as num).toDouble(),
       montantDepenses:
@@ -149,15 +151,15 @@ class PerformanceVehiculeModele {
     return PerformanceVehiculeModele(
       vehiculeId: json['vehiculeId'] as String,
       montantVersementsAttendus:
-          (json['montantVersementsAttendus'] as num)
+          (json['versementsAttendus'] as num)
               .toDouble(),
       montantVersementsRecus:
-          (json['montantVersementsRecus'] as num)
+          (json['versementsRecus'] as num)
               .toDouble(),
       ecartVersements:
           (json['ecartVersements'] as num).toDouble(),
       montantDepenses:
-          (json['montantDepenses'] as num).toDouble(),
+          (json['depenses'] as num).toDouble(),
       resultatEstime:
           (json['resultatEstime'] as num).toDouble(),
     );

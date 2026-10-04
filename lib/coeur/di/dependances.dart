@@ -8,6 +8,7 @@ import '../../donnees/sources/distantes/source_vehicule_distante_api.dart';
 import '../../domaine/cas_utilisation/connecter_utilisateur.dart';
 import '../../domaine/cas_utilisation/inscrire_utilisateur.dart';
 import '../../domaine/cas_utilisation/obtenir_tableau_de_bord.dart';
+import '../../presentation/accueil/controleur_tableau_de_bord.dart';
 import '../reseau/configuration_dio.dart';
 import '../stockage/stockage_session.dart';
 
@@ -68,6 +69,14 @@ class Dependances {
       creerObtenirTableauDeBord() {
     return ObtenirTableauDeBord(
       depot: creerDepotTableauDeBord(),
+    );
+  }
+
+  static ControleurTableauDeBord
+      creerControleurTableauDeBord() {
+    return ControleurTableauDeBord(
+      obtenirTableauDeBord:
+          creerObtenirTableauDeBord(),
     );
   }
 }
