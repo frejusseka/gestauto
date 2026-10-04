@@ -9,10 +9,10 @@ import 'intercepteur_erreur.dart';
 class ConfigurationDio {
   static String get _adresseApi {
     if (Platform.isAndroid) {
-      return 'http://10.0.2.2:8080';
+      return 'http://10.0.2.2:8080/api';
     }
 
-    return 'http://localhost:8080';
+    return 'http://localhost:8080/api';
   }
 
   static Dio creer({

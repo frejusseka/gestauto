@@ -57,10 +57,13 @@ class SourceAuthentificationDistanteApi {
     final donnees =
         reponse.data as Map<String, dynamic>;
 
+    final utilisateurJson =
+        donnees['utilisateur'] as Map<String, dynamic>;
+
     return Utilisateur(
-      id: donnees['id'] as String,
-      nom: donnees['nom'] as String,
-      email: donnees['email'] as String,
+      id: utilisateurJson['id'] as String,
+      nom: utilisateurJson['nom'] as String,
+      email: utilisateurJson['email'] as String,
     );
   }
 
