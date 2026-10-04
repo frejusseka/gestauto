@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'coeur/di/dependances.dart';
+import 'coeur/theme/theme_gestauto.dart';
 import 'presentation/authentification/page_connexion.dart';
 
 void main() {
@@ -8,7 +9,9 @@ void main() {
 }
 
 class Gestauto extends StatelessWidget {
-  const Gestauto({super.key});
+  const Gestauto({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +24,7 @@ class Gestauto extends StatelessWidget {
     return MaterialApp(
       title: 'GESTAUTO',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-        ),
-        useMaterial3: true,
-      ),
+      theme: ThemeGestauto.obtenir(),
       home: PageConnexion(
         connecterUtilisateur: connecterUtilisateur,
         inscrireUtilisateur: inscrireUtilisateur,
