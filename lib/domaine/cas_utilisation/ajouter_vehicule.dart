@@ -8,7 +8,7 @@ class AjouterVehicule {
     required this._depot,
   });
 
-  Future<void> executer(Vehicule vehicule) {
+  Future<Vehicule> executer(Vehicule vehicule) {
     return _depot.ajouter(vehicule);
   }
 }

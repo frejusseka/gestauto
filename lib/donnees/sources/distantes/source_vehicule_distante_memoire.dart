@@ -22,12 +22,18 @@ class SourceVehiculeDistanteMemoire
   }
 
   @override
-  Future<void> ajouter(Vehicule vehicule) async {
+  Future<Vehicule> ajouter(
+    Vehicule vehicule,
+  ) async {
     _vehicules.add(vehicule);
+
+    return vehicule;
   }
 
   @override
-  Future<void> modifier(Vehicule vehicule) async {
+  Future<void> modifier(
+    Vehicule vehicule,
+  ) async {
     final index = _vehicules.indexWhere(
       (element) => element.id == vehicule.id,
     );

@@ -8,6 +8,7 @@ import '../../donnees/sources/distantes/source_authentification_distante_api.dar
 import '../../donnees/sources/distantes/source_tableau_de_bord_distante_api.dart';
 import '../../donnees/sources/distantes/source_vehicule_distante_api.dart';
 import '../../donnees/sources/distantes/source_versement_distante_api.dart';
+import '../../domaine/cas_utilisation/ajouter_vehicule.dart';
 import '../../domaine/cas_utilisation/connecter_utilisateur.dart';
 import '../../domaine/cas_utilisation/creer_versement.dart';
 import '../../domaine/cas_utilisation/inscrire_utilisateur.dart';
@@ -48,11 +49,19 @@ class Dependances {
     );
   }
 
+  static AjouterVehicule creerAjouterVehicule() {
+    return AjouterVehicule(
+      depot: creerDepotVehicule(),
+    );
+  }
+
   static ControleurVehicules
       creerControleurVehicules() {
     return ControleurVehicules(
       obtenirVehicules:
           creerObtenirVehicules(),
+      ajouterVehicule:
+          creerAjouterVehicule(),
     );
   }
 

@@ -5,7 +5,7 @@ abstract class DepotVehicule {
 
   Future<Vehicule?> obtenirParId(String id);
 
-  Future<void> ajouter(Vehicule vehicule);
+  Future<Vehicule> ajouter(Vehicule vehicule);
 
   Future<void> modifier(Vehicule vehicule);
 

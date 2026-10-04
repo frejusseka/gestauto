@@ -80,19 +80,21 @@ void main() {
                 requestOptions: options,
                 statusCode: 200,
                 data: {
-                  'id': 'vehicule-2',
-                  'type': 'moto',
-                  'marque': 'Yamaha',
-                  'modele': 'XMAX',
-                  'immatriculation': '5678 CD 01',
-                  'annee': 2023,
-                  'kilometrage': 45000,
-                  'dateAcquisition':
-                      '2025-02-15T00:00:00.000',
-                  'prixAcquisition': 2500000,
-                  'statut': 'disponible',
-                  'montantVersementAttendu': 20000,
-                  'photo': 'xmax.jpg',
+                  'vehicule': {
+                    'id': 'vehicule-2',
+                    'type': 'moto',
+                    'marque': 'Yamaha',
+                    'modele': 'XMAX',
+                    'immatriculation': '5678 CD 01',
+                    'annee': 2023,
+                    'kilometrage': 45000,
+                    'dateAcquisition':
+                        '2025-02-15T00:00:00.000',
+                    'prixAcquisition': 2500000,
+                    'statut': 'disponible',
+                    'montantVersementAttendu': 20000,
+                    'photo': 'xmax.jpg',
+                  },
                 },
               ),
             );
@@ -161,8 +163,8 @@ void main() {
                 options.data as Map<String, dynamic>;
 
             expect(
-              donnees['id'],
-              'vehicule-3',
+              donnees.containsKey('id'),
+              false,
             );
             expect(
               donnees['type'],
@@ -205,7 +207,25 @@ void main() {
               Response(
                 requestOptions: options,
                 statusCode: 201,
-                data: donnees,
+                data: {
+                  'message':
+                      'Véhicule créé avec succès.',
+                  'vehicule': {
+                    'id': 'vehicule-3',
+                    'type': 'voiture',
+                    'marque': 'Renault',
+                    'modele': 'Clio',
+                    'immatriculation': '9999 EF 01',
+                    'annee': 2024,
+                    'kilometrage': 30000,
+                    'dateAcquisition':
+                        '2025-01-10T00:00:00.000',
+                    'prixAcquisition': 7000000,
+                    'statut': 'enService',
+                    'montantVersementAttendu': 20000,
+                    'photo': null,
+                  },
+                },
               ),
             );
           },
@@ -217,7 +237,7 @@ void main() {
       );
 
       final vehicule = Vehicule(
-        id: 'vehicule-3',
+        id: '',
         type: TypeVehicule.voiture,
         marque: 'Renault',
         modele: 'Clio',
@@ -234,7 +254,21 @@ void main() {
         montantVersementAttendu: 20000,
       );
 
-      await source.ajouter(vehicule);
+      final vehiculeCree =
+          await source.ajouter(vehicule);
+
+      expect(
+        vehiculeCree.id,
+        'vehicule-3',
+      );
+      expect(
+        vehiculeCree.marque,
+        'Renault',
+      );
+      expect(
+        vehiculeCree.modele,
+        'Clio',
+      );
     },
   );
 

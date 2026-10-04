@@ -104,6 +104,12 @@ class _PageVersementsState
   }
 
   Future<void> _ouvrirCreation() async {
+    await widget.controleurVehicules.charger();
+
+    if (!mounted) {
+      return;
+    }
+
     if (widget.controleurVehicules.vehicules.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -193,8 +199,9 @@ class _PageVersementsState
     if (widget.controleur.chargement &&
         versements.isEmpty) {
       return ListView(
-        physics: AlwaysScrollableScrollPhysics(),
-        children: [
+        physics:
+            const AlwaysScrollableScrollPhysics(),
+        children: const [
           SizedBox(
             height: 500,
             child: Center(
@@ -208,7 +215,8 @@ class _PageVersementsState
     if (widget.controleur.messageErreur != null &&
         versements.isEmpty) {
       return ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics:
+            const AlwaysScrollableScrollPhysics(),
         children: [
           SizedBox(
             height: 500,
@@ -220,7 +228,8 @@ class _PageVersementsState
 
     if (versements.isEmpty) {
       return ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics:
+            const AlwaysScrollableScrollPhysics(),
         children: [
           SizedBox(
             height: 500,
@@ -237,7 +246,8 @@ class _PageVersementsState
         16,
         100,
       ),
-      physics: const AlwaysScrollableScrollPhysics(),
+      physics:
+          const AlwaysScrollableScrollPhysics(),
       itemCount: versements.length,
       separatorBuilder: (context, index) =>
           const SizedBox(height: 12),

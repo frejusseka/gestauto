@@ -43,22 +43,36 @@ class SourceVehiculeDistanteApi
         reponse.data as Map<String, dynamic>;
 
     return VehiculeModele.fromJson(
-      donnees,
+      donnees['vehicule'] as Map<String, dynamic>,
     ).toEntite();
   }
 
   @override
-  Future<void> ajouter(Vehicule vehicule) async {
-    await _dio.post(
+  Future<Vehicule> ajouter(
+    Vehicule vehicule,
+  ) async {
+    final reponse = await _dio.post(
       '/protegee/vehicules',
       data: VehiculeModele.fromEntite(
         vehicule,
-      ).toJson(),
+      ).toJsonPourCreation(),
     );
+
+    final donnees =
+        reponse.data as Map<String, dynamic>;
+
+    final vehiculeJson =
+        donnees['vehicule'] as Map<String, dynamic>;
+
+    return VehiculeModele.fromJson(
+      vehiculeJson,
+    ).toEntite();
   }
 
   @override
-  Future<void> modifier(Vehicule vehicule) async {
+  Future<void> modifier(
+    Vehicule vehicule,
+  ) async {
     await _dio.put(
       '/protegee/vehicules/${vehicule.id}',
       data: VehiculeModele.fromEntite(

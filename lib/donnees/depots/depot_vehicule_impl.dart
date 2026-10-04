@@ -20,7 +20,7 @@ class DepotVehiculeImpl implements DepotVehicule {
   }
 
   @override
-  Future<void> ajouter(Vehicule vehicule) {
+  Future<Vehicule> ajouter(Vehicule vehicule) {
     return sourceDistante.ajouter(vehicule);
   }
 
