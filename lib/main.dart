@@ -21,18 +21,15 @@ class Gestauto extends StatelessWidget {
     final inscrireUtilisateur =
         Dependances.creerInscrireUtilisateur();
 
-    final controleurTableauDeBord =
-        Dependances.creerControleurTableauDeBord();
-
     return MaterialApp(
       title: 'GESTAUTO',
       debugShowCheckedModeBanner: false,
       theme: ThemeGestauto.obtenir(),
       home: PageConnexion(
-        connecterUtilisateur: connecterUtilisateur,
-        inscrireUtilisateur: inscrireUtilisateur,
-        controleurTableauDeBord:
-            controleurTableauDeBord,
+        connecterUtilisateur:
+            connecterUtilisateur,
+        inscrireUtilisateur:
+            inscrireUtilisateur,
       ),
     );
   }

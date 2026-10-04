@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../coeur/di/dependances.dart';
 import '../../coeur/theme/theme_gestauto.dart';
 import '../../domaine/entites/tableau_de_bord.dart';
-import '../vehicules/page_vehicules.dart';
 import '../widgets/carte_statistique.dart';
 import 'controleur_tableau_de_bord.dart';
 
@@ -63,17 +61,6 @@ class _PageAccueilState extends State<PageAccueil> {
     return '${tampon.toString().split('').reversed.join()} FCFA';
   }
 
-  void _ouvrirVehicules() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => PageVehicules(
-          controleur:
-              Dependances.creerControleurVehicules(),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final tableauDeBord =
@@ -83,13 +70,6 @@ class _PageAccueilState extends State<PageAccueil> {
       appBar: AppBar(
         title: const Text('GESTAUTO'),
         actions: [
-          IconButton(
-            onPressed: _ouvrirVehicules,
-            icon: const Icon(
-              Icons.directions_car_outlined,
-            ),
-            tooltip: 'Véhicules',
-          ),
           IconButton(
             onPressed: () {},
             icon: const Icon(
