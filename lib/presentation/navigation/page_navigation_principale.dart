@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../coeur/di/dependances.dart';
 import '../accueil/page_accueil.dart';
 import '../vehicules/page_vehicules.dart';
+import '../versements/page_versements.dart';
 
 class PageNavigationPrincipale extends StatefulWidget {
   const PageNavigationPrincipale({
@@ -33,9 +34,11 @@ class _PageNavigationPrincipaleState
         controleur:
             Dependances.creerControleurVehicules(),
       ),
-      const _PageProvisoire(
-        titre: 'Versements',
-        icone: Icons.payments_outlined,
+      PageVersements(
+        controleur:
+            Dependances.creerControleurVersements(),
+        controleurVehicules:
+            Dependances.creerControleurVehicules(),
       ),
       const _PageProvisoire(
         titre: 'Activité',
