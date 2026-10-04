@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../coeur/di/dependances.dart';
 import '../../coeur/theme/theme_gestauto.dart';
 import '../../domaine/entites/tableau_de_bord.dart';
+import '../vehicules/page_vehicules.dart';
 import '../widgets/carte_statistique.dart';
 import 'controleur_tableau_de_bord.dart';
 
@@ -61,14 +63,33 @@ class _PageAccueilState extends State<PageAccueil> {
     return '${tampon.toString().split('').reversed.join()} FCFA';
   }
 
+  void _ouvrirVehicules() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PageVehicules(
+          controleur:
+              Dependances.creerControleurVehicules(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tableauDeBord = widget.controleur.tableauDeBord;
+    final tableauDeBord =
+        widget.controleur.tableauDeBord;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('GESTAUTO'),
         actions: [
+          IconButton(
+            onPressed: _ouvrirVehicules,
+            icon: const Icon(
+              Icons.directions_car_outlined,
+            ),
+            tooltip: 'Véhicules',
+          ),
           IconButton(
             onPressed: () {},
             icon: const Icon(
@@ -120,7 +141,8 @@ class _PageAccueilState extends State<PageAccueil> {
             maxWidth: 1100,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
               Text(
                 'Bonjour 👋',
@@ -141,14 +163,16 @@ class _PageAccueilState extends State<PageAccueil> {
               const SizedBox(height: 28),
               LayoutBuilder(
                 builder: (context, contraintes) {
-                  final largeur = contraintes.maxWidth;
+                  final largeur =
+                      contraintes.maxWidth;
 
                   final nombreColonnes =
                       largeur >= 800 ? 4 : 2;
 
                   final largeurCarte =
                       (largeur -
-                              ((nombreColonnes - 1) * 16)) /
+                              ((nombreColonnes - 1) *
+                                  16)) /
                           nombreColonnes;
 
                   return Wrap(
@@ -161,8 +185,8 @@ class _PageAccueilState extends State<PageAccueil> {
                           titre: 'Véhicules',
                           valeur:
                               '${tableauDeBord.nombreVehicules}',
-                          icone:
-                              Icons.directions_car_outlined,
+                          icone: Icons
+                              .directions_car_outlined,
                           couleur:
                               ThemeGestauto.bleuCobalt,
                         ),
@@ -198,8 +222,8 @@ class _PageAccueilState extends State<PageAccueil> {
                           titre: 'Alertes',
                           valeur:
                               '${tableauDeBord.nombreAlertes}',
-                          icone:
-                              Icons.warning_amber_outlined,
+                          icone: Icons
+                              .warning_amber_outlined,
                           couleur: Colors.red,
                         ),
                       ),
@@ -229,7 +253,8 @@ class _PageAccueilState extends State<PageAccueil> {
     TableauDeBord tableauDeBord,
   ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
       children: [
         Text(
           'Résumé financier',
@@ -289,7 +314,8 @@ class _PageAccueilState extends State<PageAccueil> {
     TableauDeBord tableauDeBord,
   ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
       children: [
         Text(
           'Activité',
@@ -391,7 +417,8 @@ class _PageAccueilState extends State<PageAccueil> {
             maxWidth: 450,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment:
+                MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.cloud_off_outlined,
@@ -407,15 +434,12 @@ class _PageAccueilState extends State<PageAccueil> {
               ),
               const SizedBox(height: 20),
               FilledButton.icon(
-                onPressed: widget.controleur.chargement
-                    ? null
-                    : widget.controleur.charger,
-                icon: const Icon(
-                  Icons.refresh,
-                ),
-                label: const Text(
-                  'Réessayer',
-                ),
+                onPressed:
+                    widget.controleur.chargement
+                        ? null
+                        : widget.controleur.charger,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Réessayer'),
               ),
             ],
           ),
