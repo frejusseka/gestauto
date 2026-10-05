@@ -133,19 +133,31 @@ Le backend est développé avec :
 - JWT
 - bcrypt
 
+Le backend est intégré directement dans le dépôt principal :
+
+```text
+backend/
+├── lib/
+├── routes/
+├── test/
+├── pubspec.yaml
+└── README.md
+```
+
 Le backend possède sa propre architecture séparée :
 
 ```text
 lib/
 ├── coeur/
 ├── domaine/
-├── donnees/
-└── services/
+└── donnees/
 ```
 
 Les routes protégées nécessitent un jeton JWT valide.
 
-### API principale
+---
+
+## API principale
 
 Les routes sont organisées sous :
 
@@ -237,10 +249,13 @@ Ainsi, lorsqu'une requête distante échoue et que des données sont disponibles
 - PostgreSQL
 - JWT
 - bcrypt
+- UUID
 
 ### Tests
 
 - Flutter Test
+- Dart Test
+- Mocktail
 
 ---
 
@@ -278,7 +293,7 @@ dart_frog --version
 ### 1. Cloner le projet
 
 ```bash
-git clone <URL_DU_DEPOT>
+git clone https://github.com/frejusseka/gestauto.git
 cd gestauto
 ```
 
@@ -296,11 +311,11 @@ Créer une base de données PostgreSQL nommée :
 gestauto
 ```
 
-Créer ensuite les tables nécessaires à partir des scripts SQL du backend.
+Créer ensuite les tables nécessaires à partir de la structure SQL utilisée par le backend.
 
 ### 4. Configurer les variables d'environnement du backend
 
-Le backend utilise notamment des variables d'environnement pour :
+Le backend utilise notamment les variables d'environnement :
 
 ```text
 GESTAUTO_DB_PASSWORD
@@ -315,10 +330,10 @@ Ces valeurs doivent être définies dans l'environnement local avant de lancer l
 
 ## Lancer le backend
 
-Se placer dans le dossier du backend :
+Depuis la racine du projet :
 
 ```bash
-cd gestauto_backend
+cd backend
 ```
 
 Puis lancer Dart Frog :
@@ -329,17 +344,17 @@ dart_frog dev
 
 Le backend est alors disponible localement.
 
+Pour revenir à la racine du projet :
+
+```bash
+cd ..
+```
+
 ---
 
 ## Lancer l'application Flutter
 
-Dans un autre terminal :
-
-```bash
-cd gestauto
-```
-
-Puis :
+Dans un autre terminal, depuis la racine du projet :
 
 ```bash
 flutter run
@@ -349,7 +364,9 @@ flutter run
 
 ## Tests
 
-L'ensemble des tests peut être exécuté avec :
+### Tests Flutter
+
+Depuis la racine du projet :
 
 ```bash
 flutter test
@@ -365,13 +382,32 @@ Le projet contient des tests couvrant notamment :
 - le cache local ;
 - le comportement hors ligne.
 
-### Vérification de l'analyse statique
+### Tests backend
+
+Depuis la racine du projet :
 
 ```bash
-flutter analyze
+cd backend
+dart test
 ```
 
-Le projet doit être exempt d'erreurs d'analyse.
+### Vérification de l'analyse statique Flutter
+
+Depuis la racine du projet :
+
+```bash
+flutter analyze lib test
+```
+
+L'application Flutter doit être exempte d'erreurs d'analyse.
+
+### Vérification de l'analyse statique du backend
+
+Depuis le dossier `backend` :
+
+```bash
+dart analyze
+```
 
 ---
 
