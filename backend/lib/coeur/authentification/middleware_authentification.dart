@@ -61,15 +61,11 @@ Handler middleware(Handler handler) {
       );
     }
 
-    try {
-      final donnees =
-          authentification.authentifier(jeton);
+    Map<String, dynamic> donnees;
 
-      return handler(
-        context.provide<Map<String, dynamic>>(
-          () => donnees,
-        ),
-      );
+    try {
+      donnees =
+          authentification.authentifier(jeton);
     } catch (erreur) {
       return Response.json(
         statusCode: 401,
@@ -79,5 +75,11 @@ Handler middleware(Handler handler) {
         },
       );
     }
+
+    return handler(
+      context.provide<Map<String, dynamic>>(
+        () => donnees,
+      ),
+    );
   };
 }
