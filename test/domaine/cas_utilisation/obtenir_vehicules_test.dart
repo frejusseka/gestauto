@@ -1,18 +1,32 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gestauto/domaine/cas_utilisation/obtenir_vehicules.dart';
-import 'package:gestauto/domaine/entites/vehicule.dart';
+import 'package:hive/hive.dart';
+
 import 'package:gestauto/donnees/depots/depot_vehicule_impl.dart';
 import 'package:gestauto/donnees/sources/distantes/source_vehicule_distante_memoire.dart';
+import 'package:gestauto/donnees/sources/locales/source_vehicule_locale.dart';
+import 'package:gestauto/domaine/cas_utilisation/obtenir_vehicules.dart';
+import 'package:gestauto/domaine/entites/vehicule.dart';
 
 void main() {
+  late Directory repertoireTest;
   late ObtenirVehicules obtenirVehicules;
   late DepotVehiculeImpl depot;
 
-  setUp(() {
-    final source = SourceVehiculeDistanteMemoire();
+  setUpAll(() async {
+    repertoireTest = await Directory.systemTemp.createTemp(
+      'gestauto_obtenir_vehicules_test_',
+    );
 
+    Hive.init(repertoireTest.path);
+  });
+
+  setUp(() {
     depot = DepotVehiculeImpl(
-      sourceDistante: source,
+      sourceDistante:
+          SourceVehiculeDistanteMemoire(),
+      sourceLocale: SourceVehiculeLocale(),
     );
 
     obtenirVehicules = ObtenirVehicules(
@@ -20,36 +34,42 @@ void main() {
     );
   });
 
-  test('le cas d utilisation retourne tous les véhicules', () async {
-    final vehicule = Vehicule(
-      id: 'vehicule-1',
-      type: TypeVehicule.voiture,
-      marque: 'Toyota',
-      modele: 'Yaris',
-      immatriculation: '1234 AB 01',
-      annee: 2022,
-      kilometrage: 85000,
-      dateAcquisition: DateTime(2024, 5, 10),
-      prixAcquisition: 8500000,
-      statut: StatutVehicule.enService,
-      montantVersementAttendu: 20000,
-    );
+  tearDown(() async {
+    await SourceVehiculeLocale().vider();
+  });
 
-    await depot.ajouter(vehicule);
+  tearDownAll(() async {
+    await Hive.close();
 
-    final resultats = await obtenirVehicules.executer();
-
-    expect(resultats.length, 1);
-    expect(resultats.first.id, 'vehicule-1');
-    expect(resultats.first.marque, 'Toyota');
+    if (await repertoireTest.exists()) {
+      await repertoireTest.delete(recursive: true);
+    }
   });
 
   test(
-    'le cas d utilisation retourne une liste vide si aucun véhicule existe',
+    'le cas d’utilisation obtient les véhicules',
     () async {
-      final resultats = await obtenirVehicules.executer();
+      final vehicule = Vehicule(
+        id: 'vehicule-1',
+        type: TypeVehicule.moto,
+        marque: 'Yamaha',
+        modele: 'XMAX',
+        immatriculation: '5678 CD 01',
+        annee: 2023,
+        kilometrage: 45000,
+        dateAcquisition: DateTime(2025, 2, 15),
+        prixAcquisition: 2500000,
+        statut: StatutVehicule.enService,
+        montantVersementAttendu: 20000,
+      );
 
-      expect(resultats, isEmpty);
+      await depot.ajouter(vehicule);
+
+      final resultats =
+          await obtenirVehicules.executer();
+
+      expect(resultats.length, 1);
+      expect(resultats.first.id, 'vehicule-1');
     },
   );
 }

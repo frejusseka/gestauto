@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../coeur/di/dependances.dart';
 import '../accueil/page_accueil.dart';
+import '../depenses/page_depenses.dart';
+import '../pannes/page_pannes.dart';
 import '../vehicules/page_vehicules.dart';
 import '../versements/page_versements.dart';
 
@@ -25,28 +27,37 @@ class _PageNavigationPrincipaleState
   void initState() {
     super.initState();
 
+    final controleurVehicules =
+        Dependances.creerControleurVehicules();
+
     _pages = [
       PageAccueil(
         controleur:
             Dependances.creerControleurTableauDeBord(),
       ),
       PageVehicules(
-        controleur:
-            Dependances.creerControleurVehicules(),
+        controleur: controleurVehicules,
       ),
       PageVersements(
         controleur:
             Dependances.creerControleurVersements(),
         controleurVehicules:
-            Dependances.creerControleurVehicules(),
+            controleurVehicules,
       ),
-      const _PageProvisoire(
-        titre: 'Activité',
-        icone: Icons.bar_chart_outlined,
+      PageDepenses(
+        controleur:
+            Dependances.creerControleurDepenses(),
+        controleurCategories:
+            Dependances
+                .creerControleurCategoriesDepenses(),
+        controleurVehicules:
+            controleurVehicules,
       ),
-      const _PageProvisoire(
-        titre: 'Plus',
-        icone: Icons.menu,
+      PagePannes(
+        controleur:
+            Dependances.creerControleurPannes(),
+        controleurVehicules:
+            controleurVehicules,
       ),
     ];
   }
@@ -86,61 +97,20 @@ class _PageNavigationPrincipaleState
             label: 'Versements',
           ),
           NavigationDestination(
-            icon: Icon(Icons.bar_chart_outlined),
-            selectedIcon: Icon(Icons.bar_chart),
-            label: 'Activité',
+            icon: Icon(
+              Icons.receipt_long_outlined,
+            ),
+            selectedIcon: Icon(
+              Icons.receipt_long,
+            ),
+            label: 'Dépenses',
           ),
           NavigationDestination(
-            icon: Icon(Icons.menu_outlined),
-            selectedIcon: Icon(Icons.menu),
-            label: 'Plus',
+            icon: Icon(Icons.build_outlined),
+            selectedIcon: Icon(Icons.build),
+            label: 'Pannes',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PageProvisoire extends StatelessWidget {
-  final String titre;
-  final IconData icone;
-
-  const _PageProvisoire({
-    required this.titre,
-    required this.icone,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(titre),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
-          children: [
-            Icon(
-              icone,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              titre,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Cette section sera développée prochainement.',
-            ),
-          ],
-        ),
       ),
     );
   }

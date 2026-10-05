@@ -1,19 +1,17 @@
 class Depense {
   final String id;
   final String vehiculeId;
-  final String categorie;
-  final String description;
-  final double montant;
+  final String categorieId;
   final DateTime date;
-  final String? justificatif;
+  final double montant;
+  final String? description;
 
   Depense({
     required this.id,
     required this.vehiculeId,
-    required this.categorie,
-    required this.description,
-    required this.montant,
+    required this.categorieId,
     required this.date,
-    this.justificatif,
+    required this.montant,
+    this.description,
   });
 }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'coeur/di/dependances.dart';
 import 'coeur/theme/theme_gestauto.dart';
 import 'presentation/authentification/page_connexion.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+
   runApp(const Gestauto());
 }
 
