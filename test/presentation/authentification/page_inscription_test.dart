@@ -52,17 +52,21 @@ void main() {
       );
 
       expect(
-        find.text('Inscription'),
-        findsOneWidget,
-      );
-
-      expect(
         find.text('Créer un compte'),
         findsOneWidget,
       );
 
       expect(
-        find.text('Rejoignez GESTAUTO'),
+        find.text(
+          'Créer votre espace GESTAUTO',
+        ),
+        findsOneWidget,
+      );
+
+      expect(
+        find.text(
+          'Commencez à gérer votre flotte en quelques étapes.',
+        ),
         findsOneWidget,
       );
 
@@ -87,14 +91,12 @@ void main() {
       );
 
       expect(
-        find.text("S'inscrire"),
+        find.text('Créer mon compte'),
         findsOneWidget,
       );
 
       expect(
-        find.text(
-          'Déjà un compte ? Se connecter',
-        ),
+        find.text('J’ai déjà un compte'),
         findsOneWidget,
       );
     },
@@ -109,9 +111,11 @@ void main() {
         ),
       );
 
-      await tester.tap(
-        find.text("S'inscrire"),
-      );
+      final boutonInscription = find.text('Créer mon compte');
+
+      await tester.ensureVisible(boutonInscription);
+
+      await tester.tap(boutonInscription);
 
       await tester.pump();
 
@@ -152,8 +156,7 @@ void main() {
         ),
       );
 
-      final champsTexte =
-          find.byType(TextFormField);
+      final champsTexte = find.byType(TextFormField);
 
       await tester.enterText(
         champsTexte.at(0),
@@ -175,9 +178,11 @@ void main() {
         '1234567',
       );
 
-      await tester.tap(
-        find.text("S'inscrire"),
-      );
+      final boutonInscription = find.text('Créer mon compte');
+
+      await tester.ensureVisible(boutonInscription);
+
+      await tester.tap(boutonInscription);
 
       await tester.pump();
 

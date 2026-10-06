@@ -71,6 +71,13 @@ void main() {
       );
 
       expect(
+        find.text(
+          'Gestion simple et efficace de votre flotte',
+        ),
+        findsOneWidget,
+      );
+
+      expect(
         find.text('Adresse e-mail'),
         findsOneWidget,
       );
@@ -86,9 +93,12 @@ void main() {
       );
 
       expect(
-        find.text(
-          "Pas encore de compte ? S'inscrire",
-        ),
+        find.text('Vous n’avez pas encore de compte ?'),
+        findsOneWidget,
+      );
+
+      expect(
+        find.text('Créer un compte'),
         findsOneWidget,
       );
     },
