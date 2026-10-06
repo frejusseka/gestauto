@@ -1,0 +1,60 @@
+name: Vérification GESTAUTO
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  flutter:
+    name: Vérification Flutter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+
+      - name: Installer les dépendances Flutter
+        run: flutter pub get
+
+      - name: Analyser Flutter
+        run: flutter analyze lib test
+
+      - name: Exécuter les tests Flutter
+        run: flutter test
+
+  backend:
+    name: Vérification backend
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Installer les dépendances backend
+        run: dart pub get
+
+      - name: Analyser le backend
+        run: dart analyze
+
+      - name: Exécuter les tests backend
+        run: dart test
