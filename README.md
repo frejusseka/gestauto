@@ -144,14 +144,16 @@ Connexion disponible
         ↓
    Mise à jour du cache
         ↓
-     Données
+      Données
 
 Connexion indisponible
         ↓
     Cache local
         ↓
-     Données
+      Données
 ```
+
+Lorsque l'API est indisponible, le dépôt tente d'utiliser les données présentes dans le cache local. Si aucune donnée locale n'est disponible, l'erreur est transmise à la présentation afin qu'un état d'erreur soit affiché à l'utilisateur.
 
 Cette organisation permet notamment de conserver une séparation claire entre la logique métier, l'accès aux données et l'interface utilisateur.
 
@@ -331,7 +333,11 @@ Le fonctionnement est le suivant :
               Données affichées
 ```
 
-Lorsqu'une requête distante échoue et que des données sont disponibles localement, le dépôt peut utiliser les données mises en cache.
+Lorsqu'une requête distante échoue et que des données sont disponibles localement, le dépôt utilise les données mises en cache.
+
+Dans ce cas, l'interface des véhicules indique explicitement que les données affichées proviennent du **cache local** et que l'application fonctionne en **mode hors ligne**.
+
+Si l'API est indisponible et qu'aucune donnée locale n'est disponible, l'erreur est transmise à l'interface.
 
 Ce mécanisme permet à l'application de conserver un fonctionnement utile lorsque le réseau ou le backend est momentanément indisponible.
 
@@ -345,7 +351,10 @@ Lorsqu'une requête API échoue :
 
 1. l'erreur réseau est détectée ;
 2. le dépôt tente d'utiliser les données locales disponibles ;
-3. si aucune donnée locale n'est disponible, l'erreur est propagée à la couche de présentation.
+3. si des données locales existent, elles sont affichées et l'interface indique le mode hors ligne ;
+4. si aucune donnée locale n'est disponible, l'erreur est transmise à la couche de présentation.
+
+Dans ce dernier cas, l'écran affiche un état d'erreur explicite avec un message indiquant que les véhicules ne peuvent pas être chargés et un bouton **« Réessayer »** permettant de relancer la requête.
 
 Cette organisation évite de placer directement la logique réseau dans les écrans Flutter.
 
@@ -526,9 +535,10 @@ Les tests couvrent notamment :
 - l'authentification ;
 - les écrans principaux ;
 - le cache local ;
-- le comportement hors ligne.
+- le comportement hors ligne ;
+- la gestion des erreurs réseau.
 
-**Dernière vérification locale : 72 tests Flutter passent.**
+**Dernière vérification locale : 74 tests Flutter passent.**
 
 ### Tests backend
 
@@ -677,7 +687,9 @@ Ces fonctionnalités ne font pas partie du périmètre fonctionnel principal de 
 - Tableau de bord : ✅
 - Cache local Hive : ✅
 - Mode hors ligne : ✅
+- Indication visuelle du mode hors ligne : ✅
 - Gestion des erreurs réseau : ✅
+- État d'erreur avec bouton « Réessayer » : ✅
 - Tests automatisés Flutter : ✅
 - Tests automatisés backend : ✅
 - Analyse statique Flutter : ✅
@@ -687,9 +699,9 @@ Ces fonctionnalités ne font pas partie du périmètre fonctionnel principal de 
 ### Tests validés
 
 ```text
-Tests Flutter       : 72
+Tests Flutter       : 74
 Tests backend       : 41
-Total               : 113
+Total               : 115
 ```
 
 La CI GitHub valide actuellement les deux parties du projet :
@@ -725,26 +737,3 @@ Les fonctionnalités plus avancées sont volontairement réservées aux évoluti
 ## Licence
 
 Projet réalisé dans le cadre de l'apprentissage et du projet Flutter **« App connectée avec backend réel »**.
-```
-
-### Ce que cette version corrige par rapport à l'évaluation
-
-Elle rend maintenant **explicitement vérifiables** les points qui pouvaient être contestés :
-
-- le **schéma PostgreSQL** et sa commande d'import ;
-- les **tables principales** ;
-- les **écrans utilisant réellement l'API** ;
-- le fonctionnement précis du **cache/offline** ;
-- la **gestion des erreurs réseau** ;
-- les **variables d'environnement** ;
-- la procédure complète de lancement ;
-- les **72 tests Flutter + 41 tests backend** ;
-- les **113 tests au total** ;
-- la **CI GitHub Actions** ;
-- PostgreSQL utilisé directement dans la CI ;
-- le fait que les tests backend fonctionnent dans une **base vierge** ;
-- le périmètre exact de la **V1** et les évolutions V2.
-
-**Important :** je n'ai volontairement pas ajouté de fonctionnalités que nous n'avons pas effectivement validées. Le README décrit ce que le projet fait réellement.
-
-Pour l'instant, **ne fais pas de commit**. Remplace le contenu de `README.md` par cette version, puis nous ferons une vérification globale avant de l'enregistrer dans Git.
