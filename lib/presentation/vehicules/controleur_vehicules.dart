@@ -15,10 +15,9 @@ class ControleurVehicules extends ChangeNotifier {
   String? _messageErreur;
 
   ControleurVehicules({
-    required ObtenirVehicules obtenirVehicules,
-    required AjouterVehicule ajouterVehicule,
-  })  : _obtenirVehicules = obtenirVehicules,
-        _ajouterVehicule = ajouterVehicule;
+    required this._obtenirVehicules,
+    required this._ajouterVehicule,
+  });
 
   List<Vehicule> get vehicules => _vehicules;
 
