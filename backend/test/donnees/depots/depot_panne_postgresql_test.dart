@@ -1,23 +1,22 @@
+import 'package:postgres/postgres.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../lib/coeur/base_de_donnees/connexion_postgresql.dart';
-import '../../../lib/donnees/depots/depot_panne_postgresql.dart';
-import '../../../lib/domaine/entites/panne.dart';
+import 'package:gestauto_backend/coeur/base_de_donnees/connexion_postgresql.dart';
+import 'package:gestauto_backend/donnees/depots/depot_panne_postgresql.dart';
+import 'package:gestauto_backend/domaine/entites/panne.dart';
 
 void main() {
   late ConnexionPostgresql connexionPostgresql;
   late DepotPannePostgresql depotPanne;
 
-  const utilisateurId =
-      '11111111-1111-1111-1111-111111111111';
-
-  const utilisateurIdSecond =
-      '248e6915-ac22-4e36-8139-da3c94b27f5a';
-
+  late String utilisateurId;
+  late String utilisateurIdSecond;
   late String vehiculeId;
   late String vehiculeIdSecond;
   late String panneId;
+
+  const uuid = Uuid();
 
   setUpAll(() async {
     connexionPostgresql = ConnexionPostgresql();
@@ -27,92 +26,207 @@ void main() {
       connexionPostgresql: connexionPostgresql,
     );
 
-    vehiculeId = const Uuid().v4();
-    vehiculeIdSecond = const Uuid().v4();
+    utilisateurId = uuid.v4();
+    utilisateurIdSecond = uuid.v4();
+    vehiculeId = uuid.v4();
+    vehiculeIdSecond = uuid.v4();
 
     await connexionPostgresql.connexion.execute(
-      '''
-      INSERT INTO vehicules (
-        id,
-        utilisateur_id,
-        type,
-        marque,
-        modele,
-        immatriculation,
-        annee,
-        kilometrage,
-        date_acquisition,
-        prix_acquisition,
-        statut,
-        montant_versement_attendu
-      )
-      VALUES (
-        '$vehiculeId',
-        '$utilisateurId',
-        'voiture',
-        'Toyota',
-        'Corolla',
-        'TEST-PANNE-001',
-        2024,
-        15000,
-        '2024-01-15',
-        15000000,
-        'disponible',
-        20000
-      )
-      ''',
+      Sql.named(
+        '''
+        INSERT INTO utilisateurs (
+          id,
+          nom,
+          email,
+          mot_de_passe
+        )
+        VALUES (
+          @id,
+          @nom,
+          @email,
+          @motDePasse
+        )
+        ''',
+      ),
+      parameters: {
+        'id': utilisateurId,
+        'nom': 'Utilisateur Test Panne',
+        'email': 'test-panne-$utilisateurId@gestauto.com',
+        'motDePasse': 'mot-de-passe-test',
+      },
     );
 
     await connexionPostgresql.connexion.execute(
-      '''
-      INSERT INTO vehicules (
-        id,
-        utilisateur_id,
-        type,
-        marque,
-        modele,
-        immatriculation,
-        annee,
-        kilometrage,
-        date_acquisition,
-        prix_acquisition,
-        statut,
-        montant_versement_attendu
-      )
-      VALUES (
-        '$vehiculeIdSecond',
-        '$utilisateurIdSecond',
-        'moto',
-        'Yamaha',
-        'XMAX',
-        'TEST-PANNE-002',
-        2023,
-        12000,
-        '2023-05-10',
-        5000000,
-        'disponible',
-        10000
-      )
-      ''',
+      Sql.named(
+        '''
+        INSERT INTO utilisateurs (
+          id,
+          nom,
+          email,
+          mot_de_passe
+        )
+        VALUES (
+          @id,
+          @nom,
+          @email,
+          @motDePasse
+        )
+        ''',
+      ),
+      parameters: {
+        'id': utilisateurIdSecond,
+        'nom': 'Autre Utilisateur Test Panne',
+        'email': 'autre-panne-$utilisateurIdSecond@gestauto.com',
+        'motDePasse': 'mot-de-passe-test',
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        INSERT INTO vehicules (
+          id,
+          utilisateur_id,
+          type,
+          marque,
+          modele,
+          immatriculation,
+          annee,
+          kilometrage,
+          date_acquisition,
+          prix_acquisition,
+          statut,
+          montant_versement_attendu
+        )
+        VALUES (
+          @id,
+          @utilisateurId,
+          @type,
+          @marque,
+          @modele,
+          @immatriculation,
+          @annee,
+          @kilometrage,
+          @dateAcquisition,
+          @prixAcquisition,
+          @statut,
+          @montantVersementAttendu
+        )
+        ''',
+      ),
+      parameters: {
+        'id': vehiculeId,
+        'utilisateurId': utilisateurId,
+        'type': 'voiture',
+        'marque': 'Toyota',
+        'modele': 'Corolla',
+        'immatriculation': 'TEST-PANNE-001',
+        'annee': 2024,
+        'kilometrage': 15000,
+        'dateAcquisition': DateTime(2024, 1, 15),
+        'prixAcquisition': 15000000,
+        'statut': 'disponible',
+        'montantVersementAttendu': 20000,
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        INSERT INTO vehicules (
+          id,
+          utilisateur_id,
+          type,
+          marque,
+          modele,
+          immatriculation,
+          annee,
+          kilometrage,
+          date_acquisition,
+          prix_acquisition,
+          statut,
+          montant_versement_attendu
+        )
+        VALUES (
+          @id,
+          @utilisateurId,
+          @type,
+          @marque,
+          @modele,
+          @immatriculation,
+          @annee,
+          @kilometrage,
+          @dateAcquisition,
+          @prixAcquisition,
+          @statut,
+          @montantVersementAttendu
+        )
+        ''',
+      ),
+      parameters: {
+        'id': vehiculeIdSecond,
+        'utilisateurId': utilisateurIdSecond,
+        'type': 'moto',
+        'marque': 'Yamaha',
+        'modele': 'XMAX',
+        'immatriculation': 'TEST-PANNE-002',
+        'annee': 2023,
+        'kilometrage': 12000,
+        'dateAcquisition': DateTime(2023, 5, 10),
+        'prixAcquisition': 5000000,
+        'statut': 'disponible',
+        'montantVersementAttendu': 10000,
+      },
     );
   });
 
   tearDownAll(() async {
     await connexionPostgresql.connexion.execute(
-      '''
-      DELETE FROM pannes
-      WHERE id = '$panneId'
-      ''',
+      Sql.named(
+        '''
+        DELETE FROM pannes
+        WHERE vehicule_id IN (
+          @vehiculeId,
+          @vehiculeIdSecond
+        )
+        ''',
+      ),
+      parameters: {
+        'vehiculeId': vehiculeId,
+        'vehiculeIdSecond': vehiculeIdSecond,
+      },
     );
 
     await connexionPostgresql.connexion.execute(
-      '''
-      DELETE FROM vehicules
-      WHERE id IN (
-        '$vehiculeId',
-        '$vehiculeIdSecond'
-      )
-      ''',
+      Sql.named(
+        '''
+        DELETE FROM vehicules
+        WHERE id IN (
+          @vehiculeId,
+          @vehiculeIdSecond
+        )
+        ''',
+      ),
+      parameters: {
+        'vehiculeId': vehiculeId,
+        'vehiculeIdSecond': vehiculeIdSecond,
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        DELETE FROM utilisateurs
+        WHERE id IN (
+          @utilisateurId,
+          @utilisateurIdSecond
+        )
+        ''',
+      ),
+      parameters: {
+        'utilisateurId': utilisateurId,
+        'utilisateurIdSecond': utilisateurIdSecond,
+      },
     );
 
     await connexionPostgresql.fermer();
@@ -122,7 +236,7 @@ void main() {
     'créer une panne pour un véhicule autorisé',
     () async {
       final panne = Panne(
-        id: const Uuid().v4(),
+        id: uuid.v4(),
         vehiculeId: vehiculeId,
         date: DateTime(2026, 9, 29),
         description: 'Problème de frein',
@@ -239,7 +353,7 @@ void main() {
     'refuser la création pour le véhicule d un autre utilisateur',
     () async {
       final panne = Panne(
-        id: const Uuid().v4(),
+        id: uuid.v4(),
         vehiculeId: vehiculeIdSecond,
         date: DateTime(2026, 9, 29),
         description: 'Panne non autorisée',
@@ -283,7 +397,7 @@ void main() {
     'supprimer une panne',
     () async {
       final panneASupprimer = Panne(
-        id: const Uuid().v4(),
+        id: uuid.v4(),
         vehiculeId: vehiculeId,
         date: DateTime(2026, 9, 28),
         description: 'Panne temporaire',
