@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../coeur/theme/controleur_theme.dart';
 import '../../coeur/theme/theme_gestauto.dart';
 import '../../domaine/entites/tableau_de_bord.dart';
+import '../parametres/page_parametres.dart';
 import '../widgets/carte_statistique.dart';
 import 'controleur_tableau_de_bord.dart';
 
 class PageAccueil extends StatefulWidget {
   final ControleurTableauDeBord controleur;
+  final ControleurTheme controleurTheme;
+  final Future<void> Function() deconnecter;
 
   const PageAccueil({
     super.key,
     required this.controleur,
+    required this.controleurTheme,
+    required this.deconnecter,
   });
 
   @override
@@ -60,6 +66,17 @@ class _PageAccueilState extends State<PageAccueil> {
     return '${tampon.toString().split('').reversed.join()} FCFA';
   }
 
+  void _ouvrirParametres() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PageParametres(
+          controleurTheme: widget.controleurTheme,
+          deconnecter: widget.deconnecter,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tableauDeBord = widget.controleur.tableauDeBord;
@@ -79,6 +96,11 @@ class _PageAccueilState extends State<PageAccueil> {
                 : widget.controleur.charger,
             icon: const Icon(Icons.refresh_rounded),
             tooltip: 'Actualiser',
+          ),
+          IconButton(
+            onPressed: _ouvrirParametres,
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Paramètres',
           ),
           const SizedBox(width: 4),
         ],

@@ -79,6 +79,15 @@ Le projet est réalisé dans le cadre du projet Flutter **« App connectée avec
 - Alertes de maintenance
 - Suivi des véhicules nécessitant une intervention
 
+### Paramètres et apparence
+
+- Accès aux paramètres depuis le tableau de bord
+- Choix entre le mode clair et le mode sombre
+- Persistance du choix d'apparence avec `SharedPreferences`
+- Déconnexion depuis les paramètres
+- Suppression du jeton de session lors de la déconnexion
+- Retour vers l'écran de connexion après déconnexion
+
 ---
 
 ## Architecture
@@ -114,6 +123,8 @@ lib/
     ├── depenses/
     ├── pannes/
     ├── entretiens/
+    ├── parametres/
+    ├── navigation/
     └── widgets/
 ```
 
@@ -302,6 +313,7 @@ Le jeton de session est conservé localement afin de maintenir la session de l'u
 Le backend vérifie le jeton avant d'autoriser l'accès aux routes protégées.
 
 ---
+
 ## Gestion de l'état Flutter
 
 L'application utilise principalement `ChangeNotifier` pour gérer l'état des écrans Flutter.
@@ -335,6 +347,38 @@ source des données (API ou cache local)
 Par exemple, pour la gestion des véhicules, le contrôleur charge les données via le cas d'utilisation, conserve la liste des véhicules et indique à l'interface si les données proviennent de l'API distante ou du cache local.
 
 Cette approche permet de séparer la gestion de l'état de l'interface graphique tout en conservant une organisation simple et adaptée au périmètre de la première version.
+
+---
+
+## Thème et gestion de l'apparence
+
+La gestion de l'apparence est centralisée dans `coeur/theme/`.
+
+Le projet utilise un contrôleur `ChangeNotifier` dédié :
+
+```text
+ControleurTheme
+       ↓
+ThemeMode
+       ↓
+MaterialApp
+       ↓
+Thème clair / thème sombre
+```
+
+Le choix de l'utilisateur est enregistré avec `SharedPreferences`.
+
+Au démarrage de l'application, le choix précédemment enregistré est chargé afin de conserver le même mode d'affichage après un redémarrage.
+
+L'écran **Paramètres** permet à l'utilisateur de basculer entre :
+
+```text
+Mode clair
+Mode sombre
+```
+
+Le changement est appliqué immédiatement à l'ensemble de l'application.
+
 ---
 
 ## Cache local et mode hors ligne
@@ -709,6 +753,13 @@ Ces fonctionnalités ne font pas partie du périmètre fonctionnel principal de 
 ### Version livrable
 
 - Authentification JWT : ✅
+- Inscription : ✅
+- Connexion : ✅
+- Déconnexion : ✅
+- Paramètres : ✅
+- Mode clair : ✅
+- Mode sombre : ✅
+- Persistance du thème : ✅
 - API REST réelle : ✅
 - PostgreSQL : ✅
 - Gestion des véhicules : ✅

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:gestauto/coeur/stockage/stockage_session.dart';
+import 'package:gestauto/coeur/theme/controleur_theme.dart';
 import 'package:gestauto/domaine/cas_utilisation/connecter_utilisateur.dart';
 import 'package:gestauto/domaine/cas_utilisation/inscrire_utilisateur.dart';
 import 'package:gestauto/domaine/depots/depot_authentification.dart';
@@ -38,6 +39,7 @@ class _StockageSessionFictif extends StockageSession {}
 PageConnexion _creerPageConnexion() {
   final depot = _DepotAuthentificationFictif();
   final stockageSession = _StockageSessionFictif();
+  final controleurTheme = ControleurTheme();
 
   return PageConnexion(
     connecterUtilisateur: ConnecterUtilisateur(
@@ -47,6 +49,7 @@ PageConnexion _creerPageConnexion() {
     inscrireUtilisateur: InscrireUtilisateur(
       depot: depot,
     ),
+    controleurTheme: controleurTheme,
   );
 }
 

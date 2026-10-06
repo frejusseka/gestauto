@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../coeur/theme/controleur_theme.dart';
 import '../../domaine/cas_utilisation/connecter_utilisateur.dart';
 import '../../domaine/cas_utilisation/inscrire_utilisateur.dart';
 import '../navigation/page_navigation_principale.dart';
@@ -8,11 +9,13 @@ import 'page_inscription.dart';
 class PageConnexion extends StatefulWidget {
   final ConnecterUtilisateur connecterUtilisateur;
   final InscrireUtilisateur inscrireUtilisateur;
+  final ControleurTheme controleurTheme;
 
   const PageConnexion({
     super.key,
     required this.connecterUtilisateur,
     required this.inscrireUtilisateur,
+    required this.controleurTheme,
   });
 
   @override
@@ -66,7 +69,9 @@ class _PageConnexionState extends State<PageConnexion> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const PageNavigationPrincipale(),
+          builder: (context) => PageNavigationPrincipale(
+            controleurTheme: widget.controleurTheme,
+          ),
         ),
       );
     } catch (exception) {
@@ -140,14 +145,17 @@ class _PageConnexionState extends State<PageConnexion> {
                             Text(
                               'Accédez à votre espace de gestion de flotte.',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
+                                color:
+                                    theme.colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: 24),
                             TextFormField(
                               controller: _controleurEmail,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
+                              keyboardType:
+                                  TextInputType.emailAddress,
+                              textInputAction:
+                                  TextInputAction.next,
                               autofillHints: const [
                                 AutofillHints.username,
                                 AutofillHints.email,
@@ -174,9 +182,12 @@ class _PageConnexionState extends State<PageConnexion> {
                             ),
                             const SizedBox(height: 16),
                             TextFormField(
-                              controller: _controleurMotDePasse,
-                              obscureText: !_motDePasseVisible,
-                              textInputAction: TextInputAction.done,
+                              controller:
+                                  _controleurMotDePasse,
+                              obscureText:
+                                  !_motDePasseVisible,
+                              textInputAction:
+                                  TextInputAction.done,
                               autofillHints: const [
                                 AutofillHints.password,
                               ],
@@ -208,7 +219,8 @@ class _PageConnexionState extends State<PageConnexion> {
                                 ),
                               ),
                               validator: (valeur) {
-                                if (valeur == null || valeur.isEmpty) {
+                                if (valeur == null ||
+                                    valeur.isEmpty) {
                                   return 'Veuillez saisir votre mot de passe';
                                 }
 
@@ -231,7 +243,8 @@ class _PageConnexionState extends State<PageConnexion> {
                                     ? const SizedBox(
                                         width: 22,
                                         height: 22,
-                                        child: CircularProgressIndicator(
+                                        child:
+                                            CircularProgressIndicator(
                                           strokeWidth: 2,
                                         ),
                                       )
@@ -249,13 +262,15 @@ class _PageConnexionState extends State<PageConnexion> {
                       'Vous n’avez pas encore de compte ?',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color:
+                            theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 4),
                     TextButton.icon(
-                      onPressed:
-                          _connexionEnCours ? null : _ouvrirInscription,
+                      onPressed: _connexionEnCours
+                          ? null
+                          : _ouvrirInscription,
                       icon: const Icon(
                         Icons.person_add_alt_1_outlined,
                       ),

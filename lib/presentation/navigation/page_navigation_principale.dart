@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../coeur/di/dependances.dart';
+import '../../coeur/theme/controleur_theme.dart';
 import '../accueil/page_accueil.dart';
+import '../authentification/page_connexion.dart';
 import '../depenses/page_depenses.dart';
 import '../pannes/page_pannes.dart';
 import '../vehicules/page_vehicules.dart';
 import '../versements/page_versements.dart';
 
 class PageNavigationPrincipale extends StatefulWidget {
+  final ControleurTheme controleurTheme;
+
   const PageNavigationPrincipale({
     super.key,
+    required this.controleurTheme,
   });
 
   @override
@@ -34,6 +39,9 @@ class _PageNavigationPrincipaleState
       PageAccueil(
         controleur:
             Dependances.creerControleurTableauDeBord(),
+        controleurTheme:
+            widget.controleurTheme,
+        deconnecter: _deconnecter,
       ),
       PageVehicules(
         controleur: controleurVehicules,
@@ -60,6 +68,28 @@ class _PageNavigationPrincipaleState
             controleurVehicules,
       ),
     ];
+  }
+
+  Future<void> _deconnecter() async {
+    await Dependances.stockageSession.supprimerJeton();
+
+    if (!mounted) {
+      return;
+    }
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => PageConnexion(
+          connecterUtilisateur:
+              Dependances.creerConnecterUtilisateur(),
+          inscrireUtilisateur:
+              Dependances.creerInscrireUtilisateur(),
+          controleurTheme:
+              widget.controleurTheme,
+        ),
+      ),
+      (route) => false,
+    );
   }
 
   @override
