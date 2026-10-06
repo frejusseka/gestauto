@@ -1,3 +1,4 @@
+import 'package:postgres/postgres.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,16 +10,13 @@ void main() {
   late ConnexionPostgresql connexionPostgresql;
   late DepotEntretienPostgresql depotEntretien;
 
-  const utilisateurId =
-      '248e6915-ac22-4e36-8139-da3c94b27f5a';
-
-  const vehiculeId =
-      'e59b81e1-c150-4035-bf40-b124606c62e5';
-
-  const vehiculeAutreUtilisateurId =
-      '11396195-ca2c-4c30-ae3a-fd12a5fd6176';
-
+  late String utilisateurId;
+  late String autreUtilisateurId;
+  late String vehiculeId;
+  late String vehiculeAutreUtilisateurId;
   late String entretienId;
+
+  const uuid = Uuid();
 
   setUpAll(() async {
     connexionPostgresql = ConnexionPostgresql();
@@ -28,9 +26,217 @@ void main() {
     depotEntretien = DepotEntretienPostgresql(
       connexionPostgresql: connexionPostgresql,
     );
+
+    utilisateurId = uuid.v4();
+    autreUtilisateurId = uuid.v4();
+    vehiculeId = uuid.v4();
+    vehiculeAutreUtilisateurId = uuid.v4();
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        INSERT INTO utilisateurs (
+          id,
+          nom,
+          email,
+          mot_de_passe
+        )
+        VALUES (
+          @id,
+          @nom,
+          @email,
+          @motDePasse
+        )
+        ''',
+      ),
+      parameters: {
+        'id': utilisateurId,
+        'nom': 'Utilisateur Test Entretien',
+        'email': 'test-entretien-$utilisateurId@gestauto.com',
+        'motDePasse': 'mot-de-passe-test',
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        INSERT INTO utilisateurs (
+          id,
+          nom,
+          email,
+          mot_de_passe
+        )
+        VALUES (
+          @id,
+          @nom,
+          @email,
+          @motDePasse
+        )
+        ''',
+      ),
+      parameters: {
+        'id': autreUtilisateurId,
+        'nom': 'Autre Utilisateur Test',
+        'email': 'autre-entretien-$autreUtilisateurId@gestauto.com',
+        'motDePasse': 'mot-de-passe-test',
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        INSERT INTO vehicules (
+          id,
+          utilisateur_id,
+          type,
+          marque,
+          modele,
+          immatriculation,
+          annee,
+          kilometrage,
+          date_acquisition,
+          prix_acquisition,
+          statut,
+          montant_versement_attendu,
+          photo
+        )
+        VALUES (
+          @id,
+          @utilisateurId,
+          @type,
+          @marque,
+          @modele,
+          @immatriculation,
+          @annee,
+          @kilometrage,
+          @dateAcquisition,
+          @prixAcquisition,
+          @statut,
+          @montantVersementAttendu,
+          @photo
+        )
+        ''',
+      ),
+      parameters: {
+        'id': vehiculeId,
+        'utilisateurId': utilisateurId,
+        'type': 'voiture',
+        'marque': 'Toyota',
+        'modele': 'Corolla',
+        'immatriculation': 'TEST-${vehiculeId.substring(0, 8)}',
+        'annee': 2024,
+        'kilometrage': 15000,
+        'dateAcquisition': DateTime(2024, 1, 15),
+        'prixAcquisition': 12500000,
+        'statut': 'enService',
+        'montantVersementAttendu': 20000,
+        'photo': null,
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        INSERT INTO vehicules (
+          id,
+          utilisateur_id,
+          type,
+          marque,
+          modele,
+          immatriculation,
+          annee,
+          kilometrage,
+          date_acquisition,
+          prix_acquisition,
+          statut,
+          montant_versement_attendu,
+          photo
+        )
+        VALUES (
+          @id,
+          @utilisateurId,
+          @type,
+          @marque,
+          @modele,
+          @immatriculation,
+          @annee,
+          @kilometrage,
+          @dateAcquisition,
+          @prixAcquisition,
+          @statut,
+          @montantVersementAttendu,
+          @photo
+        )
+        ''',
+      ),
+      parameters: {
+        'id': vehiculeAutreUtilisateurId,
+        'utilisateurId': autreUtilisateurId,
+        'type': 'voiture',
+        'marque': 'Toyota',
+        'modele': 'Yaris',
+        'immatriculation':
+            'AUTRE-${vehiculeAutreUtilisateurId.substring(0, 8)}',
+        'annee': 2024,
+        'kilometrage': 10000,
+        'dateAcquisition': DateTime(2024, 1, 15),
+        'prixAcquisition': 10000000,
+        'statut': 'enService',
+        'montantVersementAttendu': 20000,
+        'photo': null,
+      },
+    );
   });
 
   tearDownAll(() async {
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        DELETE FROM vehicules
+        WHERE id = @id
+        ''',
+      ),
+      parameters: {
+        'id': vehiculeId,
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        DELETE FROM vehicules
+        WHERE id = @id
+        ''',
+      ),
+      parameters: {
+        'id': vehiculeAutreUtilisateurId,
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        DELETE FROM utilisateurs
+        WHERE id = @id
+        ''',
+      ),
+      parameters: {
+        'id': utilisateurId,
+      },
+    );
+
+    await connexionPostgresql.connexion.execute(
+      Sql.named(
+        '''
+        DELETE FROM utilisateurs
+        WHERE id = @id
+        ''',
+      ),
+      parameters: {
+        'id': autreUtilisateurId,
+      },
+    );
+
     await connexionPostgresql.fermer();
   });
 
@@ -38,7 +244,7 @@ void main() {
     'crée un entretien pour un véhicule autorisé',
     () async {
       final entretien = Entretien(
-        id: const Uuid().v4(),
+        id: uuid.v4(),
         vehiculeId: vehiculeId,
         type: 'Vidange',
         date: DateTime(2026, 8, 4),
@@ -169,7 +375,7 @@ void main() {
     'refuse la création avec le véhicule d un autre utilisateur',
     () async {
       final entretien = Entretien(
-        id: const Uuid().v4(),
+        id: uuid.v4(),
         vehiculeId: vehiculeAutreUtilisateurId,
         type: 'Vidange',
         date: DateTime(2026, 8, 4),
