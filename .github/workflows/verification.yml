@@ -37,13 +37,47 @@ jobs:
     name: Vérification backend
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: gestauto
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d gestauto"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     defaults:
       run:
         working-directory: backend
 
+    env:
+      GESTAUTO_DB_PASSWORD: postgres
+
     steps:
       - name: Récupérer le dépôt
         uses: actions/checkout@v4
+
+      - name: Installer PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Initialiser le schéma PostgreSQL
+        run: |
+          psql \
+            --host=localhost \
+            --port=5432 \
+            --username=postgres \
+            --dbname=gestauto \
+            --file=schema.sql
+        env:
+          PGPASSWORD: postgres
 
       - name: Installer Dart
         uses: dart-lang/setup-dart@v1
