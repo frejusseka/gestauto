@@ -11,18 +11,22 @@ class ControleurVehicules extends ChangeNotifier {
   List<Vehicule> _vehicules = [];
   bool _chargement = false;
   bool _creationEnCours = false;
+  bool _sourceLocale = false;
   String? _messageErreur;
 
   ControleurVehicules({
-    required this._obtenirVehicules,
-    required this._ajouterVehicule,
-  });
+    required ObtenirVehicules obtenirVehicules,
+    required AjouterVehicule ajouterVehicule,
+  })  : _obtenirVehicules = obtenirVehicules,
+        _ajouterVehicule = ajouterVehicule;
 
   List<Vehicule> get vehicules => _vehicules;
 
   bool get chargement => _chargement;
 
   bool get creationEnCours => _creationEnCours;
+
+  bool get sourceLocale => _sourceLocale;
 
   String? get messageErreur => _messageErreur;
 
@@ -33,7 +37,11 @@ class ControleurVehicules extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _vehicules = await _obtenirVehicules.executer();
+      final resultat =
+          await _obtenirVehicules.executer();
+
+      _vehicules = resultat.vehicules;
+      _sourceLocale = resultat.sourceLocale;
     } catch (exception) {
       _messageErreur =
           'Impossible de charger les véhicules.';
@@ -58,6 +66,8 @@ class ControleurVehicules extends ChangeNotifier {
         vehiculeCree,
         ..._vehicules,
       ];
+
+      _sourceLocale = false;
 
       return true;
     } catch (exception) {

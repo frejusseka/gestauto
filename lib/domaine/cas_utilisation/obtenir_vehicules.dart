@@ -1,5 +1,5 @@
 import '../depots/depot_vehicule.dart';
-import '../entites/vehicule.dart';
+import '../entites/resultat_vehicules.dart';
 
 class ObtenirVehicules {
   final DepotVehicule _depot;
@@ -8,7 +8,7 @@ class ObtenirVehicules {
     required this._depot,
   });
 
-  Future<List<Vehicule>> executer() {
+  Future<ResultatVehicules> executer() {
     return _depot.obtenirTous();
   }
 }

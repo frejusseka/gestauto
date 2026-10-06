@@ -12,6 +12,7 @@ import 'package:gestauto/domaine/depots/depot_depense.dart';
 import 'package:gestauto/domaine/depots/depot_vehicule.dart';
 import 'package:gestauto/domaine/entites/categorie_depense.dart';
 import 'package:gestauto/domaine/entites/depense.dart';
+import 'package:gestauto/domaine/entites/resultat_vehicules.dart';
 import 'package:gestauto/domaine/entites/vehicule.dart';
 import 'package:gestauto/presentation/depenses/controleur_categories_depenses.dart';
 import 'package:gestauto/presentation/depenses/controleur_depenses.dart';
@@ -27,8 +28,11 @@ class _DepotVehiculeFictif
   });
 
   @override
-  Future<List<Vehicule>> obtenirTous() async {
-    return vehicules;
+  Future<ResultatVehicules> obtenirTous() async {
+    return ResultatVehicules(
+      vehicules: vehicules,
+      sourceLocale: false,
+    );
   }
 
   @override

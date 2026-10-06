@@ -1,7 +1,8 @@
+import '../entites/resultat_vehicules.dart';
 import '../entites/vehicule.dart';
 
 abstract class DepotVehicule {
-  Future<List<Vehicule>> obtenirTous();
+  Future<ResultatVehicules> obtenirTous();
 
   Future<Vehicule?> obtenirParId(String id);
 

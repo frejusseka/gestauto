@@ -81,11 +81,12 @@ void main() {
     () async {
       await depot.ajouter(vehicule);
 
-      final vehicules =
+      final resultat =
           await depot.obtenirTous();
 
-      expect(vehicules.length, 1);
-      expect(vehicules.first.id, 'vehicule-1');
+      expect(resultat.vehicules.length, 1);
+      expect(resultat.vehicules.first.id, 'vehicule-1');
+      expect(resultat.sourceLocale, isFalse);
     },
   );
 
@@ -162,12 +163,16 @@ void main() {
         sourceLocale: sourceLocale,
       );
 
-      final vehicules =
+      final resultat =
           await depotHorsLigne.obtenirTous();
 
-      expect(vehicules.length, 1);
-      expect(vehicules.first.id, 'vehicule-1');
-      expect(vehicules.first.marque, 'Yamaha');
+      expect(resultat.vehicules.length, 1);
+      expect(resultat.vehicules.first.id, 'vehicule-1');
+      expect(
+        resultat.vehicules.first.marque,
+        'Yamaha',
+      );
+      expect(resultat.sourceLocale, isTrue);
     },
   );
 }

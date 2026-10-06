@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gestauto/domaine/cas_utilisation/ajouter_vehicule.dart';
 import 'package:gestauto/domaine/cas_utilisation/obtenir_vehicules.dart';
 import 'package:gestauto/domaine/depots/depot_vehicule.dart';
+import 'package:gestauto/domaine/entites/resultat_vehicules.dart';
 import 'package:gestauto/domaine/entites/vehicule.dart';
 import 'package:gestauto/presentation/vehicules/controleur_vehicules.dart';
 import 'package:gestauto/presentation/vehicules/page_vehicules.dart';
@@ -12,19 +13,24 @@ class _DepotVehiculeFictif
     implements DepotVehicule {
   final List<Vehicule> vehicules;
   final bool provoquerErreur;
+  final bool sourceLocale;
 
   _DepotVehiculeFictif({
     this.vehicules = const [],
     this.provoquerErreur = false,
+    this.sourceLocale = false,
   });
 
   @override
-  Future<List<Vehicule>> obtenirTous() async {
+  Future<ResultatVehicules> obtenirTous() async {
     if (provoquerErreur) {
       throw Exception('Erreur réseau');
     }
 
-    return vehicules;
+    return ResultatVehicules(
+      vehicules: vehicules,
+      sourceLocale: sourceLocale,
+    );
   }
 
   @override
@@ -69,10 +75,12 @@ Vehicule _creerVehicule() {
 ControleurVehicules _creerControleur({
   List<Vehicule> vehicules = const [],
   bool provoquerErreur = false,
+  bool sourceLocale = false,
 }) {
   final depot = _DepotVehiculeFictif(
     vehicules: vehicules,
     provoquerErreur: provoquerErreur,
+    sourceLocale: sourceLocale,
   );
 
   return ControleurVehicules(
@@ -143,7 +151,41 @@ void main() {
   );
 
   testWidgets(
-    'la page affiche un message lorsque aucun véhicule n est enregistré',
+    'la page affiche le mode hors ligne lorsque les données viennent du cache',
+    (tester) async {
+      final vehicule = _creerVehicule();
+
+      final controleur = _creerControleur(
+        vehicules: [vehicule],
+        sourceLocale: true,
+      );
+
+      await _afficherPage(
+        tester,
+        controleur,
+      );
+
+      expect(
+        find.text('Mode hors ligne'),
+        findsOneWidget,
+      );
+
+      expect(
+        find.text(
+          'Les données affichées proviennent du cache local.',
+        ),
+        findsOneWidget,
+      );
+
+      expect(
+        find.text('Toyota Corolla'),
+        findsOneWidget,
+      );
+    },
+  );
+
+  testWidgets(
+    'la page affiche un message lorsque aucun véhicule n’est enregistré',
     (tester) async {
       final controleur = _creerControleur();
 

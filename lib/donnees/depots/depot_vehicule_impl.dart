@@ -1,4 +1,5 @@
 import '../../domaine/depots/depot_vehicule.dart';
+import '../../domaine/entites/resultat_vehicules.dart';
 import '../../domaine/entites/vehicule.dart';
 import '../modeles/vehicule_modele.dart';
 import '../sources/distantes/source_vehicule_distante.dart';
@@ -14,10 +15,9 @@ class DepotVehiculeImpl implements DepotVehicule {
   });
 
   @override
-  Future<List<Vehicule>> obtenirTous() async {
+  Future<ResultatVehicules> obtenirTous() async {
     try {
-      final vehicules =
-          await sourceDistante.obtenirTous();
+      final vehicules = await sourceDistante.obtenirTous();
 
       final modeles = vehicules
           .map(
@@ -29,9 +29,17 @@ class DepotVehiculeImpl implements DepotVehicule {
         modeles,
       );
 
-      return vehicules;
+      return ResultatVehicules(
+        vehicules: vehicules,
+        sourceLocale: false,
+      );
     } catch (_) {
-      return sourceLocale.obtenirTous();
+      final vehicules = await sourceLocale.obtenirTous();
+
+      return ResultatVehicules(
+        vehicules: vehicules,
+        sourceLocale: true,
+      );
     }
   }
 

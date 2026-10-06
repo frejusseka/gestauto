@@ -118,13 +118,18 @@ class _PageVehiculesState extends State<PageVehicules> {
           20,
           100,
         ),
-        itemCount: widget.controleur.vehicules.length,
+        itemCount:
+            widget.controleur.vehicules.length + 1,
         separatorBuilder: (context, index) {
           return const SizedBox(height: 12);
         },
         itemBuilder: (context, index) {
+          if (index == 0) {
+            return _construireIndicateurSource();
+          }
+
           final vehicule =
-              widget.controleur.vehicules[index];
+              widget.controleur.vehicules[index - 1];
 
           return _CarteVehicule(
             vehicule: vehicule,
@@ -143,6 +148,58 @@ class _PageVehiculesState extends State<PageVehicules> {
     );
   }
 
+  Widget _construireIndicateurSource() {
+    if (!widget.controleur.sourceLocale) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.orange.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.orange.withValues(alpha: 0.35),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.cloud_off_outlined,
+            color: Colors.orange,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Mode hors ligne',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Les données affichées proviennent du cache local.',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _construireErreur() {
     return Center(
       child: Padding(
@@ -152,7 +209,8 @@ class _PageVehiculesState extends State<PageVehicules> {
             maxWidth: 450,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment:
+                MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.cloud_off_outlined,
@@ -184,7 +242,8 @@ class _PageVehiculesState extends State<PageVehicules> {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment:
+              MainAxisAlignment.center,
           children: [
             Icon(
               Icons.directions_car_outlined,
@@ -293,9 +352,10 @@ class _CarteVehicule extends StatelessWidget {
   }
 
   Widget _construireIcone() {
-    final icone = vehicule.type == TypeVehicule.moto
-        ? Icons.two_wheeler
-        : Icons.directions_car;
+    final icone =
+        vehicule.type == TypeVehicule.moto
+            ? Icons.two_wheeler
+            : Icons.directions_car;
 
     return Container(
       width: 56,
@@ -392,14 +452,18 @@ class _FormulaireVehiculeState
   final _formulaire = GlobalKey<FormState>();
 
   TypeVehicule _type = TypeVehicule.voiture;
-  StatutVehicule _statut = StatutVehicule.disponible;
+  StatutVehicule _statut =
+      StatutVehicule.disponible;
   DateTime _dateAcquisition = DateTime.now();
 
-  final _controleurMarque = TextEditingController();
-  final _controleurModele = TextEditingController();
+  final _controleurMarque =
+      TextEditingController();
+  final _controleurModele =
+      TextEditingController();
   final _controleurImmatriculation =
       TextEditingController();
-  final _controleurAnnee = TextEditingController();
+  final _controleurAnnee =
+      TextEditingController();
   final _controleurKilometrage =
       TextEditingController();
   final _controleurPrixAcquisition =
@@ -484,8 +548,10 @@ class _FormulaireVehiculeState
     final vehicule = Vehicule(
       id: '',
       type: _type,
-      marque: _controleurMarque.text.trim(),
-      modele: _controleurModele.text.trim(),
+      marque:
+          _controleurMarque.text.trim(),
+      modele:
+          _controleurModele.text.trim(),
       immatriculation:
           _controleurImmatriculation.text
               .trim()
@@ -572,7 +638,8 @@ class _FormulaireVehiculeState
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _controleurMarque,
+                controller:
+                    _controleurMarque,
                 textCapitalization:
                     TextCapitalization.words,
                 decoration:
@@ -593,7 +660,8 @@ class _FormulaireVehiculeState
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _controleurModele,
+                controller:
+                    _controleurModele,
                 textCapitalization:
                     TextCapitalization.words,
                 decoration:
@@ -636,7 +704,8 @@ class _FormulaireVehiculeState
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _controleurAnnee,
+                controller:
+                    _controleurAnnee,
                 keyboardType:
                     TextInputType.number,
                 decoration:
@@ -695,7 +764,8 @@ class _FormulaireVehiculeState
                 child: InputDecorator(
                   decoration:
                       const InputDecoration(
-                    labelText: 'Date d’acquisition',
+                    labelText:
+                        'Date d’acquisition',
                     prefixIcon: Icon(
                       Icons.event_outlined,
                     ),
@@ -717,7 +787,8 @@ class _FormulaireVehiculeState
                 ),
                 decoration:
                     const InputDecoration(
-                  labelText: 'Prix d’acquisition',
+                  labelText:
+                      'Prix d’acquisition',
                   suffixText: 'FCFA',
                   prefixIcon: Icon(
                     Icons.payments_outlined,
@@ -749,26 +820,33 @@ class _FormulaireVehiculeState
                 ),
                 items: const [
                   DropdownMenuItem(
-                    value: StatutVehicule.enService,
+                    value:
+                        StatutVehicule.enService,
                     child: Text('En service'),
                   ),
                   DropdownMenuItem(
-                    value: StatutVehicule.disponible,
+                    value:
+                        StatutVehicule.disponible,
                     child: Text('Disponible'),
                   ),
                   DropdownMenuItem(
                     value:
                         StatutVehicule.enMaintenance,
-                    child: Text('En maintenance'),
+                    child: Text(
+                      'En maintenance',
+                    ),
                   ),
                   DropdownMenuItem(
-                    value: StatutVehicule.enPanne,
+                    value:
+                        StatutVehicule.enPanne,
                     child: Text('En panne'),
                   ),
                   DropdownMenuItem(
                     value:
                         StatutVehicule.horsService,
-                    child: Text('Hors service'),
+                    child: Text(
+                      'Hors service',
+                    ),
                   ),
                 ],
                 onChanged: widget.creationEnCours
@@ -797,7 +875,8 @@ class _FormulaireVehiculeState
                       'Versement attendu',
                   suffixText: 'FCFA',
                   prefixIcon: Icon(
-                    Icons.account_balance_wallet_outlined,
+                    Icons
+                        .account_balance_wallet_outlined,
                   ),
                 ),
                 validator: (valeur) {

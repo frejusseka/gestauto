@@ -65,11 +65,15 @@ void main() {
 
       await depot.ajouter(vehicule);
 
-      final resultats =
+      final resultat =
           await obtenirVehicules.executer();
 
-      expect(resultats.length, 1);
-      expect(resultats.first.id, 'vehicule-1');
+      expect(resultat.vehicules.length, 1);
+      expect(
+        resultat.vehicules.first.id,
+        'vehicule-1',
+      );
+      expect(resultat.sourceLocale, isFalse);
     },
   );
 }
