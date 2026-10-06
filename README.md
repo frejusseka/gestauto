@@ -302,6 +302,40 @@ Le jeton de session est conservé localement afin de maintenir la session de l'u
 Le backend vérifie le jeton avant d'autoriser l'accès aux routes protégées.
 
 ---
+## Gestion de l'état Flutter
+
+L'application utilise principalement `ChangeNotifier` pour gérer l'état des écrans Flutter.
+
+Les contrôleurs de présentation centralisent l'état nécessaire à chaque écran et utilisent `notifyListeners()` pour informer l'interface lorsqu'une donnée ou un état change.
+
+Le flux général est le suivant :
+
+```text
+Interface Flutter
+       ↓
+Contrôleur de présentation
+       ↓
+Cas d'utilisation
+       ↓
+Dépôt (Repository)
+       ↓
+API distante / Cache local
+```
+
+Un contrôleur peut notamment exposer les états suivants :
+
+```text
+chargement
+erreur
+données
+création en cours
+source des données (API ou cache local)
+```
+
+Par exemple, pour la gestion des véhicules, le contrôleur charge les données via le cas d'utilisation, conserve la liste des véhicules et indique à l'interface si les données proviennent de l'API distante ou du cache local.
+
+Cette approche permet de séparer la gestion de l'état de l'interface graphique tout en conservant une organisation simple et adaptée au périmètre de la première version.
+---
 
 ## Cache local et mode hors ligne
 
