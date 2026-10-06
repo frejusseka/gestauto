@@ -175,6 +175,29 @@ void main() {
       expect(resultat.sourceLocale, isTrue);
     },
   );
+
+  test(
+    'le dépôt transmet l’erreur si le serveur échoue et que le cache est vide',
+    () async {
+      final depotHorsLigne =
+          DepotVehiculeImpl(
+        sourceDistante:
+            SourceVehiculeDistanteEnErreur(),
+        sourceLocale: SourceVehiculeLocale(),
+      );
+
+      await expectLater(
+        depotHorsLigne.obtenirTous(),
+        throwsA(
+          isA<Exception>().having(
+            (exception) => exception.toString(),
+            'message',
+            contains('Serveur indisponible'),
+          ),
+        ),
+      );
+    },
+  );
 }
 
 class SourceVehiculeDistanteEnErreur

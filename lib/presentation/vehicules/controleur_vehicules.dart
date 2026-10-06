@@ -42,9 +42,10 @@ class ControleurVehicules extends ChangeNotifier {
 
       _vehicules = resultat.vehicules;
       _sourceLocale = resultat.sourceLocale;
-    } catch (exception) {
+    } catch (_) {
       _messageErreur =
-          'Impossible de charger les véhicules.';
+          'Impossible de charger les véhicules. '
+          'Vérifiez votre connexion puis réessayez.';
     } finally {
       _chargement = false;
 
@@ -70,9 +71,10 @@ class ControleurVehicules extends ChangeNotifier {
       _sourceLocale = false;
 
       return true;
-    } catch (exception) {
+    } catch (_) {
       _messageErreur =
-          'Impossible d’ajouter le véhicule.';
+          'Impossible d’ajouter le véhicule. '
+          'Vérifiez votre connexion puis réessayez.';
 
       return false;
     } finally {

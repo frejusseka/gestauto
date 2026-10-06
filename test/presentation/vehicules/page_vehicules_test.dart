@@ -227,7 +227,8 @@ void main() {
 
       expect(
         find.text(
-          'Impossible de charger les véhicules.',
+          'Impossible de charger les véhicules. '
+          'Vérifiez votre connexion puis réessayez.',
         ),
         findsOneWidget,
       );

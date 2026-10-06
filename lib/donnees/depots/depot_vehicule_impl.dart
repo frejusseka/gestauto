@@ -36,6 +36,10 @@ class DepotVehiculeImpl implements DepotVehicule {
     } catch (_) {
       final vehicules = await sourceLocale.obtenirTous();
 
+      if (vehicules.isEmpty) {
+        rethrow;
+      }
+
       return ResultatVehicules(
         vehicules: vehicules,
         sourceLocale: true,
